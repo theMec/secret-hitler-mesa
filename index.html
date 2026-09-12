@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <base href="/secret-hitler-mesa/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="Secret Hitler — mesa digital para jugar entre amigos.">
+  <meta name="theme-color" content="#0b0708">
+
+  <!-- Añadir a pantalla de inicio en iPhone: se abre sin barras. -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Secret Hitler">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Secret Hitler</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      background: #0b0708;
+      overscroll-behavior: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* The page is black from the first byte, so Flutter's own splash fades in
+       out of the same dark instead of out of a white flash. */
+    #arranque {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: #0b0708;
+      transition: opacity .6s ease;
+      z-index: 2;
+    }
+    #arranque img { width: 96px; height: 96px; opacity: .5; border-radius: 18px; }
+    #arranque.listo { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <div id="arranque"><img src="icons/Icon-192.png" alt=""></div>
+  <script>
+    // A tab nobody is looking at makes no sound. Flutter reports the tab
+    // going away and the app stops the music itself, but this is the layer
+    // that cannot fail: whatever is playing, pause it when the page hides.
+    document.addEventListener('visibilitychange', function () {
+      var hidden = document.visibilityState === 'hidden';
+      var tags = document.getElementsByTagName('audio');
+      for (var i = 0; i < tags.length; i++) {
+        if (hidden) { tags[i].pause(); }
+      }
+    });
+    window.addEventListener('flutter-first-frame', function () {
+      var v = document.getElementById('arranque');
+      if (v) { v.classList.add('listo'); setTimeout(function () { v.remove(); }, 700); }
+    });
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
